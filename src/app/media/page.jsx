@@ -1,4 +1,6 @@
 export default function MediaPage() {
+  const hasMediaItems = false;
+
   const mediaItems = [
     { type: 'photo', title: 'Research Setup', desc: 'The desk where all three pillars get built. Bangladesh, 2026.' },
     { type: 'photo', title: 'Fabric Defect Labeling Session', desc: 'Annotating fabric images in Roboflow, week 2 session.' },
@@ -22,34 +24,35 @@ export default function MediaPage() {
       </div>
 
       <div className="notice-card" data-reveal>
-        <div className="label">To add your own media</div>
+        <div className="label">Coming Soon</div>
         <p className="helper-note">
-          Add photo files to public/media/ and update the src/data/site.js media array.
-          For videos, upload to YouTube or Vimeo and paste the embed URL. See README for details.
+          Coming soon — media in progress.
         </p>
       </div>
 
-      <div className="media-grid" data-reveal>
-        {mediaItems.map((item, i) => (
-          <div key={item.title} className="media-card">
-            <div className="media-placeholder" style={{ background: phColor[i % phColor.length] }}>
-              <div>
-                <div style={{ fontSize: '2rem', textAlign: 'center' }}>
-                  {item.type === 'video' ? '▶' : '📷'}
+      {hasMediaItems ? (
+        <div className="media-grid" data-reveal>
+          {mediaItems.map((item, i) => (
+            <div key={item.title} className="media-card">
+              <div className="media-placeholder" style={{ background: phColor[i % phColor.length] }}>
+                <div>
+                  <div style={{ fontSize: '2rem', textAlign: 'center' }}>
+                    {item.type === 'video' ? '▶' : '📷'}
+                  </div>
+                  <div className="label">{item.type === 'video' ? 'VIDEO' : 'PHOTO'} PLACEHOLDER</div>
                 </div>
-                <div className="label">{item.type === 'video' ? 'VIDEO' : 'PHOTO'} PLACEHOLDER</div>
+                <div style={{ position: 'absolute', top: 10, left: 10 }}>
+                  <span className={`tag ${item.type === 'video' ? 'rust' : ''}`}>{item.type}</span>
+                </div>
               </div>
-              <div style={{ position: 'absolute', top: 10, left: 10 }}>
-                <span className={`tag ${item.type === 'video' ? 'rust' : ''}`}>{item.type}</span>
+              <div className="media-content">
+                <div className="card-title">{item.title}</div>
+                <p className="card-copy">{item.desc}</p>
               </div>
             </div>
-            <div className="media-content">
-              <div className="card-title">{item.title}</div>
-              <p className="card-copy">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : null}
 
       <section className="section-stack" data-reveal>
         <div className="label">Behind the Scenes</div>

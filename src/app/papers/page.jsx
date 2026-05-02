@@ -1,6 +1,8 @@
 import { researchPillars } from '../../data/site';
 
 export default function PapersPage() {
+  const hasPaperEntries = false;
+
   return (
     <>
       <div className="page-intro" data-reveal>
@@ -15,37 +17,38 @@ export default function PapersPage() {
       <div className="notice-card" data-reveal>
         <div className="label">Transparency Note</div>
         <p className="card-copy">
-          These papers are in preparation, meaning the research is active and the writing follows experimental milestones.
-          I document the process publicly through the blog and will post preprints when they are ready.
+          Coming soon — papers in progress.
         </p>
       </div>
 
-      <div className="section-grid" data-reveal>
-        {researchPillars.map(paper => (
-          <article key={paper.id} className="card feature-card">
-            <div className="chip-row">
-              <span className={`tag ${paper.color}`}>{paper.label}</span>
-              <span className="tag">In preparation</span>
-            </div>
-
-            <h2 className="card-title">{paper.paperTitle}</h2>
-            <div className="label">Tahmid Al Muntasir et al.</div>
-
-            <div className="section-grid">
-              <div>
-                <div className="label">Target Venue</div>
-                <div className="card-copy">{paper.target}</div>
+      {hasPaperEntries ? (
+        <div className="section-grid" data-reveal>
+          {researchPillars.map(paper => (
+            <article key={paper.id} className="card feature-card">
+              <div className="chip-row">
+                <span className={`tag ${paper.color}`}>{paper.label}</span>
+                <span className="tag">In preparation</span>
               </div>
-              <div>
-                <div className="label">Status</div>
-                <div className="card-copy">Preprint after milestone completion</div>
-              </div>
-            </div>
 
-            <p className="card-copy">{paper.description}</p>
-          </article>
-        ))}
-      </div>
+              <h2 className="card-title">{paper.paperTitle}</h2>
+              <div className="label">Tahmid Al Muntasir et al.</div>
+
+              <div className="section-grid">
+                <div>
+                  <div className="label">Target Venue</div>
+                  <div className="card-copy">{paper.target}</div>
+                </div>
+                <div>
+                  <div className="label">Status</div>
+                  <div className="card-copy">Preprint after milestone completion</div>
+                </div>
+              </div>
+
+              <p className="card-copy">{paper.description}</p>
+            </article>
+          ))}
+        </div>
+      ) : null}
 
       <div className="card" data-reveal>
         <h3 className="card-title">Get notified when papers drop</h3>

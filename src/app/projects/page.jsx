@@ -1,6 +1,21 @@
 'use client';
 import { projects } from '../../data/site';
 
+function getBadgeLabel(value) {
+  if (Array.isArray(value)) {
+    return value
+      .map(item => (typeof item === 'string' ? item : item?.label ?? ''))
+      .filter(Boolean)
+      .join(' · ');
+  }
+
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  return value?.label ?? '';
+}
+
 export default function ProjectsPage() {
   return (
     <>
@@ -19,7 +34,7 @@ export default function ProjectsPage() {
               <div className="chip-row">
                 <span className={`tag ${project.pillarColor}`}>{project.pillar}</span>
                 <span className="tag">{project.phase}</span>
-                <span className="tag">{project.status}</span>
+                <span className={`tag ${getBadgeLabel(project.status).toLowerCase().includes('active') ? 'rust' : ''}`}>{getBadgeLabel(project.status)}</span>
               </div>
               <span className="status-dot" />
             </div>

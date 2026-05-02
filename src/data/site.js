@@ -12,10 +12,11 @@ export const siteConfig = {
     kaggle: "https://www.kaggle.com/tahmidalmuntasir",
     leetcode: "https://leetcode.com/tahmidalmuntasir",
     twitter: "",
+    // Drop the CV at public/cv.pdf when it is ready.
     cv: "/cv.pdf",
   },
   forms: {
-    formspreeId: '',
+    formspreeId: process.env.NEXT_PUBLIC_FORMSPREE_ID ?? '',
   },
   status: "Open to PhD Opportunities · 2026",
   quote: '"The best research solves real problems." — TAM',

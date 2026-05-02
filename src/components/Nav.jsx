@@ -49,7 +49,7 @@ export default function Nav() {
             <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="LinkedIn (opens in new window)">
               LinkedIn ↗
             </a>
-            <a href={siteConfig.links.cv} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="Download CV (opens in new window)">
+            <a href={siteConfig.links.cv} title="CV coming soon" target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="Download CV (opens in new window)">
               CV ↗
             </a>
           </div>
@@ -78,7 +78,7 @@ export default function Nav() {
           <div className="nav-drawer-meta">
             <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="GitHub (opens in new window)">GitHub ↗</a>
             <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="LinkedIn (opens in new window)">LinkedIn ↗</a>
-            <a href={siteConfig.links.cv} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="Download CV (opens in new window)">CV ↗</a>
+            <a href={siteConfig.links.cv} title="CV coming soon" target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label="Download CV (opens in new window)">CV ↗</a>
           </div>
         </div>
       )}

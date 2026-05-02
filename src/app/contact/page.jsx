@@ -5,7 +5,7 @@ import { siteConfig } from '../../data/site';
 export default function ContactPage() {
   const [status, setStatus] = useState('idle');
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const formspreeId = siteConfig.forms?.formspreeId;
+  const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID ?? siteConfig.forms?.formspreeId;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -46,6 +46,7 @@ export default function ContactPage() {
 
       <div className="form-grid" data-reveal>
         <div className="card">
+          {!formspreeId && <div className="form-error">Contact form not yet configured.</div>}
           {status === 'done' ? (
             <div className="form-success">
               <strong className="experience-title">Message sent.</strong>
@@ -110,7 +111,7 @@ export default function ContactPage() {
               </button>
 
               <p className="form-note">
-                Add your Formspree ID in src/data/site.js to activate this form.
+                Add NEXT_PUBLIC_FORMSPREE_ID to your local environment to activate this form.
                 Free tier at <a href="https://formspree.io" target="_blank" rel="noopener noreferrer" className="link-rust" aria-label="Formspree (opens in new window)">formspree.io</a>.
               </p>
             </form>

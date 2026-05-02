@@ -1,5 +1,21 @@
 import Link from 'next/link';
 import { experience, projects, researchPillars, siteConfig } from '../data/site';
+import ProfileImage from '../components/ProfileImage';
+
+function getBadgeLabel(value) {
+  if (Array.isArray(value)) {
+    return value
+      .map(item => (typeof item === 'string' ? item : item?.label ?? ''))
+      .filter(Boolean)
+      .join(' · ');
+  }
+
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  return value?.label ?? '';
+}
 
 export default function HomePage() {
   return (
@@ -19,7 +35,7 @@ export default function HomePage() {
           </p>
 
           <div className="hero-actions">
-            <a className="button" href={siteConfig.links.cv} target="_blank" rel="noopener noreferrer">
+            <a className="button" href={siteConfig.links.cv} title="CV coming soon" target="_blank" rel="noopener noreferrer">
               Download CV
             </a>
             <Link className="button button-secondary" href="/research">
@@ -46,6 +62,8 @@ export default function HomePage() {
         <aside className="hero-side">
           <div className="info-panel">
             <div className="label">Profile</div>
+            {/* Add your photo as public/media/profile.jpg */}
+            <ProfileImage />
             <h3>{siteConfig.name}</h3>
             <p className="card-copy">{siteConfig.description}</p>
             <div className="chip-row">
@@ -104,7 +122,7 @@ export default function HomePage() {
                 <div className="chip-row">
                   <span className={`tag ${project.pillarColor}`}>{project.pillar}</span>
                   <span className="tag">{project.phase}</span>
-                  <span className="tag">{project.status}</span>
+                  <span className={`tag ${getBadgeLabel(project.status).toLowerCase().includes('active') ? 'rust' : ''}`}>{getBadgeLabel(project.status)}</span>
                 </div>
                 <span className="status-dot" aria-hidden="true" />
               </div>
@@ -115,11 +133,9 @@ export default function HomePage() {
               <div className="project-footer">
                 {project.github && (
                   <a className="label link-inline" href={project.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-                +                  <a className="label link-inline" href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} GitHub repository (opens in new window)`}>GitHub ↗</a>
                 )}
                 {project.demo && (
                   <a className="label link-inline" href={project.demo} target="_blank" rel="noopener noreferrer">Demo ↗</a>
-                +                  <a className="label link-inline" href={project.demo} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} demo (opens in new window)`}>Demo ↗</a>
                 )}
               </div>
 
