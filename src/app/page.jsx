@@ -2,19 +2,12 @@ import Link from 'next/link';
 import { experience, projects, researchPillars, siteConfig } from '../data/site';
 import ProfileImage from '../components/ProfileImage';
 
-function getBadgeLabel(value) {
-  if (Array.isArray(value)) {
-    return value
-      .map(item => (typeof item === 'string' ? item : item?.label ?? ''))
-      .filter(Boolean)
-      .join(' · ');
-  }
-
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  return value?.label ?? '';
+function StatusBadge({ status }) {
+  const isActive = typeof status === 'string' && status.toLowerCase().includes('active');
+  const label = typeof status === 'string' ? status : (status?.label ?? '');
+  return (
+    <span className={`tag ${isActive ? 'rust' : ''}`}>{label}</span>
+  );
 }
 
 export default function HomePage() {
@@ -45,16 +38,19 @@ export default function HomePage() {
 
           <div className="stat-grid">
             <div className="stat-card">
-              <strong>Textile Engineering</strong>
-              <span className="card-copy">Grounded in real manufacturing constraints and materials behavior.</span>
+              <span className="stat-accent">3</span>
+              <strong>Active Research Tracks</strong>
+              <span className="card-copy">Wearables, vision, and robotics — all grounded in textile manufacturing.</span>
             </div>
             <div className="stat-card">
-              <strong>Data Science Ready</strong>
-              <span className="card-copy">ML, CV, control, and reproducible experimentation across the stack.</span>
+              <span className="stat-accent">2×</span>
+              <strong>Industry Rotations</strong>
+              <span className="card-copy">Production-floor experience at SQUARE Apparels shaping every system design.</span>
             </div>
             <div className="stat-card">
-              <strong>Research + Build</strong>
-              <span className="card-copy">Structured to communicate both academic depth and engineering execution.</span>
+              <span className="stat-accent">→</span>
+              <strong>MSc / PhD Ready</strong>
+              <span className="card-copy">Built for competitive Data Science and AI graduate admissions in 2026.</span>
             </div>
           </div>
         </div>
@@ -62,11 +58,10 @@ export default function HomePage() {
         <aside className="hero-side">
           <div className="info-panel">
             <div className="label">Profile</div>
-            {/* Add your photo as public/media/profile.jpg */}
             <ProfileImage />
             <h3>{siteConfig.name}</h3>
             <p className="card-copy">{siteConfig.description}</p>
-            <div className="chip-row">
+            <div className="chip-row" style={{marginTop: '0.6rem'}}>
               <span className="tag rust">Machine Learning</span>
               <span className="tag steel">Computer Vision</span>
               <span className="tag sage">Robotics</span>
@@ -83,7 +78,6 @@ export default function HomePage() {
                 LinkedIn ↗
               </a>
             </div>
-
           </div>
 
           <div className="info-panel">
@@ -104,7 +98,7 @@ export default function HomePage() {
         </aside>
       </section>
 
-      <section className="section-stack" data-reveal>
+      <section className="section-stack" data-reveal data-reveal-delay="1">
         <div className="section-header">
           <div>
             <div className="section-kicker">Selected Projects</div>
@@ -122,7 +116,7 @@ export default function HomePage() {
                 <div className="chip-row">
                   <span className={`tag ${project.pillarColor}`}>{project.pillar}</span>
                   <span className="tag">{project.phase}</span>
-                  <span className={`tag ${getBadgeLabel(project.status).toLowerCase().includes('active') ? 'rust' : ''}`}>{getBadgeLabel(project.status)}</span>
+                  <StatusBadge status={project.status} />
                 </div>
                 <span className="status-dot" aria-hidden="true" />
               </div>
@@ -145,9 +139,9 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <div className="stack-row">
+              <div className="stack-row" style={{marginTop: '0.4rem'}}>
                 {project.highlights.map(highlight => (
-                  <span key={highlight} className="tag steel">{highlight}</span>
+                  <span key={highlight} className="tag steel">✓ {highlight}</span>
                 ))}
               </div>
             </article>
@@ -155,7 +149,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-stack" data-reveal>
+      <section className="section-stack" data-reveal data-reveal-delay="2">
         <div className="section-header">
           <div>
             <div className="section-kicker">Experience & Academic Status</div>
@@ -196,7 +190,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-stack" data-reveal>
+      <section className="section-stack" data-reveal data-reveal-delay="3">
         <div className="section-header">
           <div>
             <div className="section-kicker">Research Pillars</div>
@@ -213,6 +207,12 @@ export default function HomePage() {
               </div>
               <h3 className="card-title">{pillar.title}</h3>
               <p className="card-copy">{pillar.summary}</p>
+              {pillar.target && (
+                <div className="pillar-target">
+                  <span className="label">Target venue</span>
+                  <span className="card-copy">{pillar.target}</span>
+                </div>
+              )}
             </article>
           ))}
         </div>

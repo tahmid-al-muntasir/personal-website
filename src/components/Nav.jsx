@@ -63,16 +63,19 @@ export default function Nav() {
       {open && (
         <div className="nav-drawer">
           <nav className="nav-drawer-links">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={`nav-drawer-link ${pathname === href ? 'is-active' : ''}`}
-              >
-                {label}
-              </Link>
-            ))}
+            {navLinks.map(({ href, label }) => {
+              const active = pathname === href || (href !== '/' && pathname.startsWith(href));
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className={`nav-drawer-link ${active ? 'is-active' : ''}`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="nav-drawer-meta">

@@ -358,15 +358,6 @@ pre,
   background: rgba(148, 163, 184, 0.08);
 }
 
-.tag.rust,
-.tag.steel,
-.tag.sage,
-.tag.amber {
-  border-color: rgba(34, 211, 238, 0.48);
-  background: rgba(34, 211, 238, 0.14);
-  color: #a5f3fc;
-}
-
 .status-dot {
   width: 8px;
   height: 8px;
@@ -449,11 +440,99 @@ pre,
   padding: 0.95rem;
 }
 
+/* ── Stat card accent number ── */
+.stat-accent {
+  display: block;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
 .stat-card strong {
   display: block;
   margin-bottom: 0.34rem;
   font-size: 0.98rem;
 }
+
+/* ── Staggered scroll reveals ── */
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+
+/* ── Pillar target venue ── */
+.pillar-target {
+  margin-top: 0.8rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* ── Distinct pillar tag colors ── */
+.tag.rust {
+  border-color: rgba(239, 100, 68, 0.5);
+  background: rgba(239, 100, 68, 0.12);
+  color: #fca07a;
+}
+
+.tag.amber {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.12);
+  color: #fcd476;
+}
+
+.tag.sage {
+  border-color: rgba(74, 163, 110, 0.5);
+  background: rgba(74, 163, 110, 0.12);
+  color: #86efac;
+}
+
+.tag.steel {
+  border-color: rgba(34, 211, 238, 0.4);
+  background: rgba(34, 211, 238, 0.1);
+  color: #a5f3fc;
+}
+
+/* ── Enhanced card hover with glow ── */
+.project-card:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  box-shadow: var(--shadow-lift), 0 0 0 1px rgba(34, 211, 238, 0.08);
+}
+
+/* ── Feature card pillar accent on hover ── */
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* ── Subtle page grain overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ── Nav active link glow ── */
+.nav-link.is-active {
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+}
+
+/* ── Smooth highlight chip ✓ marks ── */
+.tag.steel {
+  gap: 0.3rem;
+}
+
+
 
 .section-stack {
   margin-top: 1.3rem;

@@ -4,16 +4,22 @@ import { useEffect } from 'react';
 
 export default function ScrollReveal() {
   useEffect(() => {
+    // Reveal elements already in the viewport immediately (e.g. hero)
+    const revealNow = (node) => {
+      const delay = node.dataset.revealDelay ? parseFloat(node.dataset.revealDelay) * 80 : 0;
+      setTimeout(() => node.classList.add('is-revealed'), delay);
+    };
+
     const scrollObserver = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
+            revealNow(entry.target);
             scrollObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.14, rootMargin: '0px 0px -8% 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
     );
 
     const observeElements = () => {
@@ -21,10 +27,8 @@ export default function ScrollReveal() {
       nodes.forEach(node => scrollObserver.observe(node));
     };
 
-    // Observe initial elements
     observeElements();
 
-    // Watch for new [data-reveal] elements added to DOM (on navigation)
     const mutationObserver = new MutationObserver(() => {
       observeElements();
     });
