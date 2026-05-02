@@ -108,6 +108,8 @@ export const getAllProjects = async () => {
 }
 
 export const getProjectBySlug = async (slug: string) => {
+  if (!slug) return null
+
   return client.fetch<any>(
     groq`*[_type == "project" && slug.current == $slug][0] {
       ${projectFields}
@@ -200,6 +202,8 @@ export const getAllBlogPosts = async () => {
 }
 
 export const getBlogPostBySlug = async (slug: string) => {
+  if (!slug) return null
+
   return client.fetch<any>(
     groq`*[_type == "blog" && slug.current == $slug][0] {
       ${blogFields}

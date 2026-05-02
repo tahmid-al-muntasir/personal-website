@@ -4,19 +4,34 @@ import { getBlogPostBySlug, getAllBlogPosts } from '../../../sanity/lib/queries'
 
 export const revalidate = 10;
 
+async function resolveSlug(params) {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+
+  return typeof slug === 'string' ? slug : Array.isArray(slug) ? slug[0] : '';
+}
+
 export async function generateStaticParams() {
   const all = await getAllBlogPosts();
-  return (all || []).map((p) => ({ slug: p.slug?.current || '' }));
+  return (all || [])
+    .map((p) => ({ slug: p.slug?.current || '' }))
+    .filter((params) => params.slug);
 }
 
 export async function generateMetadata({ params }) {
-  const post = await getBlogPostBySlug(params.slug);
+  const slug = await resolveSlug(params);
+  if (!slug) return {};
+
+  const post = await getBlogPostBySlug(slug);
   if (!post) return {};
   return { title: `${post.title} | TAM`, description: post.excerpt };
 }
 
 export default async function BlogPostPage({ params }) {
-  const post = await getBlogPostBySlug(params.slug);
+  const slug = await resolveSlug(params);
+  if (!slug) return notFound();
+
+  const post = await getBlogPostBySlug(slug);
   if (!post) return notFound();
 
   const allPosts = await getAllBlogPosts();
