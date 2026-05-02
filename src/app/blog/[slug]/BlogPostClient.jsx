@@ -1,5 +1,6 @@
-﻿'use client';
+﻿"use client";
 import Link from 'next/link';
+import { renderPortableText } from '../../../components/PortableTextRenderer';
 
 const catColors = { research: 'steel', devlog: 'rust', language: 'sage', math: 'amber', note: '', linkedin: 'steel' };
 
@@ -123,8 +124,9 @@ function renderContent(content) {
 }
 
 export default function BlogPostClient({ post, allPosts }) {
-  const related = allPosts
-    .filter(p => p.slug !== post.slug && (p.category === post.category || p.pillar === post.pillar))
+  const getSlug = (p) => p?.slug?.current ?? p?.slug;
+  const related = (allPosts || [])
+    .filter((p) => getSlug(p) !== getSlug(post) && (p.category === post.category || p.pillar === post.pillar))
     .slice(0, 3);
 
   return (
@@ -139,26 +141,30 @@ export default function BlogPostClient({ post, allPosts }) {
         <div className="chip-row">
           <span className={`tag ${catColors[post.category] || ''}`}>{post.category}</span>
           {post.pillar && <span className="tag">{post.pillar}</span>}
-          {post.tags.map(t => <span key={t} className="tag">{t}</span>)}
+          {post.tags?.map((t) => (
+            <span key={t} className="tag">
+              {t}
+            </span>
+          ))}
         </div>
         <h1>{post.title}</h1>
         <div className="label">
-          {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {new Date(post.date ?? post.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           {' | '}
           {post.readTime} read
         </div>
       </header>
 
       <article className="prose" data-reveal>
-        {renderContent(post.content)}
+        {post.body ? renderPortableText(post.body) : renderContent(post.content)}
       </article>
 
       {related.length > 0 && (
         <section className="section-stack" data-reveal>
           <div className="label">Related Posts</div>
           <div className="blog-list">
-            {related.map(p => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="blog-list-item">
+            {related.map((p) => (
+              <Link key={getSlug(p)} href={`/blog/${getSlug(p)}`} className="blog-list-item">
                 <div className="chip-row">
                   <span className={`tag ${catColors[p.category] || ''}`}>{p.category}</span>
                 </div>

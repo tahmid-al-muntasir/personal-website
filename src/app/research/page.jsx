@@ -1,8 +1,19 @@
-'use client';
-import Link from 'next/link';
-import { experience, researchPillars } from '../../data/site';
+import Link from 'next/link'
+import { getAllResearch } from '../../sanity/lib/queries'
+import { renderPortableText } from '../../components/PortableTextRenderer'
+import { client } from '../../sanity/lib/client'
 
-export default function ResearchPage() {
+export const revalidate = 10; // Revalidates the page every 10 seconds
+export default async function ResearchPage() {
+  const researchPillars = await getAllResearch()
+  const researchDebug = await client.fetch(`*[_type == "research"]{_id,title,pillarId}`)
+  console.log('RESEARCH DATA:', researchPillars)
+  console.log('RESEARCH DEBUG QUERY:', researchDebug)
+  console.log('SANITY ENV (RESEARCH):', {
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  })
+
   return (
     <>
       <div className="page-intro" data-reveal>
@@ -14,31 +25,49 @@ export default function ResearchPage() {
         </p>
       </div>
 
+      {(researchPillars?.length ?? 0) === 0 ? (
+        <div className="notice-card" data-reveal>
+          <div className="label">Research</div>
+          <p className="card-copy">No research documents found in Sanity yet.</p>
+        </div>
+      ) : (
       <div className="section-grid" data-reveal>
-        {researchPillars.map(pillar => (
-          <section key={pillar.id} id={pillar.id} className="card feature-card">
+        {researchPillars?.map((pillar) => (
+          <section key={pillar._id} id={pillar.pillarId} className="card feature-card">
             <div className="card-topline">
               <div className="chip-row">
-                <span className={`tag ${pillar.color}`}>{pillar.label}</span>
+                <span className={`tag ${pillar.color}`}>{pillar.pillarId?.toUpperCase?.() || 'PILLAR'}</span>
                 <span className="tag">{pillar.phase}</span>
               </div>
-              <span className="tag rust">{pillar.num}</span>
+              <span className="tag rust">{pillar.pillarId === 'p1' ? '01' : pillar.pillarId === 'p2' ? '02' : '03'}</span>
             </div>
 
             <h2 className="card-title">{pillar.title}</h2>
-            <p className="card-copy">{pillar.description}</p>
+            <div className="card-copy">
+              {Array.isArray(pillar.description)
+                ? renderPortableText(pillar.description)
+                : pillar.description}
+            </div>
 
             <div className="section-grid">
               <div>
                 <div className="label">Key Problems</div>
                 <div className="stack-row">
-                  {pillar.problems.map(problem => <span key={problem} className="tag">{problem}</span>)}
+                  {pillar.keyProblems?.map((problem) => (
+                    <span key={problem} className="tag">
+                      {problem}
+                    </span>
+                  ))}
                 </div>
               </div>
               <div>
                 <div className="label">Stack</div>
                 <div className="stack-row">
-                  {pillar.stack.map(item => <span key={item} className="tag">{item}</span>)}
+                  {pillar.techStack?.map((item) => (
+                    <span key={item} className="tag">
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -46,42 +75,12 @@ export default function ResearchPage() {
             <div className="surface-panel">
               <div className="label">Paper in preparation</div>
               <div className="experience-title">{pillar.paperTitle}</div>
-              <div className="label">Target: {pillar.target}</div>
+              <div className="label">Target: {pillar.targetVenue}</div>
             </div>
           </section>
         ))}
       </div>
-
-      <section className="section-stack" data-reveal>
-        <div className="section-header">
-          <div>
-            <div className="section-kicker">Experience</div>
-            <h2>Industrial rotations and thesis status</h2>
-          </div>
-        </div>
-
-        <div className="timeline">
-          {experience.map((item, index) => (
-            <div key={item.title} className="timeline-item">
-              <div className="label">{item.period}</div>
-              <div className="timeline-rail">
-                <div className="timeline-dot" />
-                {index < experience.length - 1 && <div className="timeline-line" />}
-              </div>
-              <div className="card timeline-card">
-                <div className="experience-meta">
-                  <div>
-                    <strong className="experience-title">{item.title}</strong>
-                    <div className="label">{item.org}</div>
-                  </div>
-                  <span className={`tag ${item.status === 'In progress' ? 'rust' : ''}`}>{item.status}</span>
-                </div>
-                <p className="card-copy">{item.summary}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      )}
 
       <section className="section-stack" data-reveal>
         <div className="card">
@@ -97,5 +96,6 @@ export default function ResearchPage() {
         </div>
       </section>
     </>
-  );
+  )
 }
+

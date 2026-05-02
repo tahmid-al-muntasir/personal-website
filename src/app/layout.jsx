@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import Nav from '../components/Nav';
 import ScrollReveal from '../components/ScrollReveal';
+import { Providers } from './providers';
 
 export const metadata = {
   metadataBase: new URL('https://tahmids-website.vercel.app'),
@@ -45,21 +46,23 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <ScrollReveal />
-        <a href="#main-content" className="skip-link">Skip to main content</a>
-        <div className="site-wrap">
-          <div className="layout-main">
-            <Nav />
-            <main id="main-content" className="content-main page-shell">
-              {children}
-            </main>
-            <footer className="site-footer" role="contentinfo">
-              <div className="footer-content">
-                <p className="label">© 2026 Tahmid Al Muntasir. Built with Next.js, CSS, and rigor.</p>
-              </div>
-            </footer>
+        <Providers>
+          <ScrollReveal />
+          <a href="#main-content" className="skip-link">Skip to main content</a>
+          <div className="site-wrap">
+            <div className="layout-main">
+              <Nav />
+              <main id="main-content" className="content-main page-shell">
+                {children}
+              </main>
+              <footer className="site-footer" role="contentinfo">
+                <div className="footer-content">
+                  <p className="label">© 2026 Tahmid Al Muntasir. Built with Next.js, CSS, and rigor.</p>
+                </div>
+              </footer>
+            </div>
           </div>
-        </div>
+        </Providers>
       </body>
     </html>
   );

@@ -1,22 +1,19 @@
-'use client';
-import { projects } from '../../data/site';
+import { getAllProjects } from '../../sanity/lib/queries'
+import { renderPortableText } from '../../components/PortableTextRenderer'
 
-function getBadgeLabel(value) {
-  if (Array.isArray(value)) {
-    return value
-      .map(item => (typeof item === 'string' ? item : item?.label ?? ''))
-      .filter(Boolean)
-      .join(' · ');
+export const revalidate = 10; // Revalidates the page every 10 seconds
+function getPillarColor(pillar) {
+  const colorMap = {
+    p1: 'rust',
+    p2: 'amber',
+    p3: 'sage',
   }
-
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  return value?.label ?? '';
+  return colorMap[pillar] || ''
 }
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getAllProjects()
+
   return (
     <>
       <div className="page-intro" data-reveal>
@@ -29,34 +26,50 @@ export default function ProjectsPage() {
 
       <div className="bento-grid" data-reveal>
         {projects.map((project, index) => (
-          <article key={project.id} className={`card project-card bento-item ${index === 0 ? 'hero-span' : 'wide'}`}>
+          <article key={project._id} className={`card project-card bento-item ${index === 0 ? 'hero-span' : 'wide'}`}>
             <div className="card-topline">
               <div className="chip-row">
-                <span className={`tag ${project.pillarColor}`}>{project.pillar}</span>
+                <span className={`tag ${getPillarColor(project.pillar)}`}>{project.pillar?.toUpperCase()}</span>
                 <span className="tag">{project.phase}</span>
-                <span className={`tag ${getBadgeLabel(project.status).toLowerCase().includes('active') ? 'rust' : ''}`}>{getBadgeLabel(project.status)}</span>
+                <span className={`tag ${project.status?.toLowerCase() === 'active' ? 'rust' : ''}`}>{project.status}</span>
               </div>
               <span className="status-dot" />
             </div>
 
             <h2 className="card-title">{project.title}</h2>
-            <p className="card-copy">{project.description}</p>
+            <p className="card-copy">{Array.isArray(project.description) ? renderPortableText(project.description) : project.description}</p>
 
             <div className="project-footer">
-              {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label={`${project.title} GitHub repository (opens in new window)`}>GitHub ↗</a>}
-              {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label={`${project.title} demo (opens in new window)`}>Demo ↗</a>}
+              {project.githubUrl && (
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label={`${project.title} GitHub repository (opens in new window)`}>
+                  GitHub ↗
+                </a>
+              )}
+              {project.demoUrl && (
+                <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="label link-inline" aria-label={`${project.title} demo (opens in new window)`}>
+                  Demo ↗
+                </a>
+              )}
             </div>
 
             <div className="stack-row">
-              {project.stack.map(stackItem => <span key={stackItem} className="tag">{stackItem}</span>)}
+              {project.techStack?.map((stackItem) => (
+                <span key={stackItem} className="tag">
+                  {stackItem}
+                </span>
+              ))}
             </div>
 
             <div className="stack-row">
-              {project.highlights.map(highlight => <span key={highlight} className="tag steel">{highlight}</span>)}
+              {project.highlights?.map((highlight) => (
+                <span key={highlight} className="tag steel">
+                  {highlight}
+                </span>
+              ))}
             </div>
           </article>
         ))}
       </div>
     </>
-  );
+  )
 }
